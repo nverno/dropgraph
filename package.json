@@ -1,0 +1,36 @@
+{
+  "name": "dropgraph",
+  "version": "0.0.1",
+  "description": "make pretty graph things",
+  "license": "WTFPL",
+  "author": "Noah Peart <noah.v.peart@gmail.com> (https://www.github.com/nverno)",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint --ext '.js,.ts,.tsx' .",
+    "lint:fix": "npm run lint -- --fix",
+    "prepare": "husky install",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.43.0",
+    "@typescript-eslint/parser": "^5.43.0",
+    "eslint": "^8.27.0",
+    "eslint-config-import": "^0.13.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-config-standard-react": "^12.0.0",
+    "eslint-config-standard-with-typescript": "^23.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.5.1",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.1.1",
+    "eslint-plugin-react": "^7.31.10",
+    "eslint-plugin-standard": "^5.0.0",
+    "husky": "^8.0.2",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "prettier-plugin-jsdoc": "^0.4.2",
+    "prettier-plugin-packagejson": "^2.3.0",
+    "typescript": "^4.9.3"
+  }
+}
