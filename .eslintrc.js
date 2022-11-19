@@ -15,8 +15,7 @@ const requiresTypeRulesOff = Object.fromEntries(
 module.exports = {
   root: true,
   extends: [
-    'standard',
-    'standard-react',
+    'plugin:react/recommended',
     'plugin:@typescript-eslint/recommended',
     'standard-with-typescript',
     'prettier',
