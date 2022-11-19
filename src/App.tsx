@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { createRoot } from 'react-dom/client';
 import { BrowserRouter, useLocation } from 'react-router-dom';
 import Container from './Container';
+import '../styles/global.css';
 
 export interface AppProps {}
 

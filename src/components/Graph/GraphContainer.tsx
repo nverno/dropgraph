@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import Graph from 'react-graph-vis';
+import { exampleGraph, randomColor } from '../../util';
 
 export interface GraphContainerProps {}
 
@@ -12,44 +13,17 @@ const options = {
   },
 };
 
-const randomColor = () => {
-  const red = Math.floor(Math.random() * 256)
-    .toString(16)
-    .padStart(2, '0');
-  const green = Math.floor(Math.random() * 256)
-    .toString(16)
-    .padStart(2, '0');
-  const blue = Math.floor(Math.random() * 256)
-    .toString(16)
-    .padStart(2, '0');
-  return `#${red}${green}${blue}`;
-};
-
-export const GraphContainer: FC<GraphContainerProps> = (props) => {
+export const GraphContainer: FC<GraphContainerProps> = () => {
   const [state, setState] = React.useState({
-    counter: 5,
-    graph: {
-      nodes: [
-        { id: 1, label: 'Node 1', color: '#e04141' },
-        { id: 2, label: 'Node 2', color: '#e09c41' },
-        { id: 3, label: 'Node 3', color: '#e0df41' },
-        { id: 4, label: 'Node 4', color: '#7be041' },
-        { id: 5, label: 'Node 5', color: '#41e0c9' },
-      ],
-      edges: [
-        { from: 1, to: 2 },
-        { from: 1, to: 3 },
-        { from: 2, to: 4 },
-        { from: 2, to: 5 },
-      ],
-    },
+    counter: 20,
+    graph: exampleGraph(20),
     events: {
       select: ({ nodes, edges }) => {
         console.log('Selected nodes:');
         console.log(nodes);
         console.log('Selected edges:');
         console.log(edges);
-        alert('Selected node: ' + nodes);
+        /* alert('Selected node: ' + nodes); */
       },
       doubleClick: ({ pointer: { canvas } }) => {
         createNode(canvas.x, canvas.y);
@@ -57,7 +31,7 @@ export const GraphContainer: FC<GraphContainerProps> = (props) => {
     },
   });
 
-  const createNode = (x, y) => {
+  const createNode = (x: number, y: number) => {
     setState(({ graph: { nodes, edges }, counter, ...rest }) => {
       const color = randomColor();
       const id = counter + 1;
@@ -77,7 +51,6 @@ export const GraphContainer: FC<GraphContainerProps> = (props) => {
 
   return (
     <div>
-      <h1>Graph</h1>
       <Graph
         graph={graph}
         options={options}

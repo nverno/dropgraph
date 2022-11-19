@@ -1,10 +1,15 @@
 import React, { FC } from 'react';
-import { GraphContainer } from '..';
+import { GraphContainer, DataInput } from '..';
 
 export interface MainPageProps {}
 
-export const MainPage: FC<MainPageProps> = (props) => {
-  return <GraphContainer />;
+export const MainPage: FC<MainPageProps> = () => {
+  return (
+    <div>
+      <DataInput />
+      <GraphContainer />
+    </div>
+  );
 };
 
 export default MainPage;

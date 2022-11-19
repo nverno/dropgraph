@@ -1,25 +1,23 @@
 const fs = require('fs');
-const _path = require('path');
 const killPort = require('kill-port');
 const colors = require('picocolors');
 const { defineConfig, createLogger, loadEnv } = require('vite');
 const { esbuildCommonjs } = require('@originjs/vite-plugin-commonjs');
 const react = require('@vitejs/plugin-react');
 const dts = require('vite-dts').default;
-// const reactSvgPlugin = require('vite-plugin-react-svg');
 const PORT = process.env.PORT || 3000;
+// const _path = require('path');
+// const reactSvgPlugin = require('vite-plugin-react-svg');
 
-const getPkg = () => {
-  const pkg = require('./package.json');
-
-  pkg.main = pkg.main || 'dist/index.js';
-  pkg.module = pkg.module || 'dist/index.es.js';
-  pkg.style = pkg.style || 'dist/index.css';
-  pkg.types = pkg.types || 'dist/index.d.ts';
-  pkg.source = pkg.source || 'src/App.tsx';
-
-  return pkg;
-};
+// const getPkg = () => {
+//   const pkg = require('./package.json');
+//   pkg.main = pkg.main || 'dist/index.js';
+//   pkg.module = pkg.module || 'dist/index.es.js';
+//   pkg.style = pkg.style || 'dist/index.css';
+//   pkg.types = pkg.types || 'dist/index.d.ts';
+//   pkg.source = pkg.source || 'src/App.tsx';
+//   return pkg;
+// };
 
 const logger = createLogger('info', { allowClearScreen: false });
 
@@ -34,7 +32,7 @@ const getProcessEnv = ({ mode, command }) => {
     return { 'process.env': 'process.env' };
   }
 
-  const reactAppEnv = loadEnv(mode, '', ['REACT_APP_']);
+  const reactAppEnv = loadEnv(mode, '', ['REACT_APP_', 'VITE_']);
 
   if (Object.keys(reactAppEnv).length) {
     return Object.fromEntries(
@@ -115,7 +113,7 @@ const createConfig = (options = {}) => {
       } catch {}
     }
 
-    const _pkg = getPkg();
+    // const _pkg = getPkg();
 
     if (tailwindcss) {
       ensureTailwindConfig();
@@ -131,7 +129,7 @@ const createConfig = (options = {}) => {
         ...getProcessEnv(env),
       },
 
-      envPrefix: 'REACT_APP_',
+      envPrefix: ['VITE_', 'REACT_APP_'],
 
       resolve: {
         alias: [
@@ -150,15 +148,16 @@ const createConfig = (options = {}) => {
       plugins: [react(), dts()], //, reactSvgPlugin()],
 
       build: {
-        lib: {
-          entry: _path.resolve(_pkg.source),
-          formats: ['cjs', 'es'],
-          fileName: (format) =>
-            _path.basename({ cjs: _pkg.main, es: _pkg.module }[format]),
-        },
         emptyOutDir: !process.argv.includes('--watch'),
         minify: false,
         sourcemap: true,
+        // note: to build as module
+        // lib: {
+        //   entry: _path.resolve(_pkg.source),
+        //   formats: ['cjs', 'es'],
+        //   fileName: (format) =>
+        //     _path.basename({ cjs: _pkg.main, es: _pkg.module }[format]),
+        // },
         // rollupOptions: {
         //   external: (id) => !id.startsWith('.') && !_path.isAbsolute(id),
         //   output: {
