@@ -7,38 +7,38 @@
 using std::vector;
 using std::string;
 using std::map;
-using std::set
-;
+using std::set;
 using graph = map<int,vector<int>>;
 
-extern "C" {
-    // EMSCRIPTEN_KEEPALIVE
-    graph from_edgelist(string s, bool undirected = true) {
-        const int n = s.size();
-        map<int,set<int>> res;
-        int first = 0, a = -1;
-        for (int i = 0; i < n; ++i) {
-            if (isdigit(s[i])) {
-                int num = s[i] - '0';
-                while (++i < n && isdigit(s[i])) {
-                    num = 10*num + (s[i]-'0');
-                }
-                if (first) {
-                    res[a].insert(num);
-                    if (undirected)
-                        res[num].insert(a);
-                } else {
-                    a = num;
-                }
-                first ^= 1;
+#define WASM_EXPORT __attribute__((visibility("default"))) extern "C"
+
+// EMSCRIPTEN_KEEPALIVE
+WASM_EXPORT
+graph from_edgelist(string s, bool undirected = true) {
+    const int n = s.size();
+    map<int,set<int>> res;
+    int first = 0, a = -1;
+    for (int i = 0; i < n; ++i) {
+        if (isdigit(s[i])) {
+            int num = s[i] - '0';
+            while (++i < n && isdigit(s[i])) {
+                num = 10*num + (s[i]-'0');
             }
+            if (first) {
+                res[a].insert(num);
+                if (undirected)
+                    res[num].insert(a);
+            } else {
+                a = num;
+            }
+            first ^= 1;
         }
-        graph g;
-        for (auto& [u,v] : res) {
-            g[u] = vector<int>(begin(v), end(v));
-        }
-        return g;
     }
+    graph g;
+    for (auto& [u,v] : res) {
+        g[u] = vector<int>(begin(v), end(v));
+    }
+    return g;
 }
 
 #ifdef TEST
