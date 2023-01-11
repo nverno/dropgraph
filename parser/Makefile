@@ -1,6 +1,14 @@
-SHELL    = /bin/bash
-CXXFLAGS = -Wall -Wshadow -fsanitize=address -fsanitize=undefined -O2 -std=c++17
-CXX      = g++
+SHELL      = /bin/bash
+CXXFLAGS   = -Wall -Wshadow -fsanitize=address -fsanitize=undefined -O2 -std=c++17
+CXX        = g++
+CXXINCLUDE = -I/usr/include/c++/12                  \
+	-I/usr/include/x86_64-linux-gnu/c++/12      \
+	-I/usr/include/c++/12/backward              \
+	-I/usr/local/include                        \
+	-I/usr/lib/llvm-14/lib/clang/14.0.0/include \
+	-I/usr/include/x86_64-linux-gnu             \
+	-I/usr/include
+
 
 EM++ = "$(HOME)/src/emsdk/upstream/emscripten/em++"
 
@@ -20,13 +28,7 @@ COMPILE_FLAGS = -Wall                               \
 	-DPRINTF_DISABLE_SUPPORT_FLOAT=1            \
 	-DPRINTF_DISABLE_SUPPORT_LONG_LONG=1        \
 	-DPRINTF_DISABLE_SUPPORT_PTRDIFF_T=1        \
-	-I/usr/include/c++/12                       \
-	-I/usr/include/x86_64-linux-gnu/c++/12      \
-	-I/usr/include/c++/12/backward              \
-	-I/usr/local/include                        \
-	-I/usr/lib/llvm-14/lib/clang/14.0.0/include \
-	-I/usr/include/x86_64-linux-gnu             \
-	-I/usr/include
+	$(CXXINCLUDE)
 
 all:
 	@
@@ -67,17 +69,12 @@ graph.html: graph.cpp
 		-sMODULARIZE                                  \
 		-sEXPORTED_FUNCTIONS=_from_edgelist           \
 		-s "EXPORTED_RUNTIME_METHODS=['ccall']"
-
-# test.wasm: graph.cpp
-# 	clang++ $^                                             \
-# 		--compile --target=wasm32-unknown-unknown-wasm \
-# 	        --optimize=3                                   \
-# 		-I/usr/include/x86_64-linux-gnu/c++/12         \
-# 		-I/usr/include/c++/12                          \
-# 		--output $@
+n
+test.wasm: graph.cpp
+	clang++ $^ -o $@ -c -O3 --target=wasm32-unknown-unknown-wasm $(CXXINCLUDE)
 
 clean:
-	$(RM) -r core *~ *.o *.out *.exe graph.wasm graph.html graph.js
+	$(RM) -r core *~ *.o *.out *.exe graph.wasm graph.html graph.js test.wasm
 
 distclean: clean
 	$(RM)
